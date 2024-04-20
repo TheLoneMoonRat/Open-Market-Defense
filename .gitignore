@@ -80,3 +80,9 @@ crashlytics-build.properties
 *.txt
 *.hash
 /Open Market Defense/Temp
+/Open/Temp
+*.hdr
+*.mat
+*.lighting
+*.brush
+*.terrainlayer
