@@ -6,33 +6,42 @@ public class AIMovement : MonoBehaviour
 {
     public Rigidbody rb;
     public Transform enemy;
-    Vector3 target;
+    Vector3 direction;
+    Vector3 target = new Vector3(211.8262f, 0f, 161.6237f);
     int lives;
-    float targetDistance;
+    float directionDistance = 1000f;
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(move());
+        if (this.gameObject.name != "soldier") {
+            StartCoroutine(move());
+            foreach (Transform childTransform in this.transform)
+            {
+                MeshRenderer mymesh = childTransform.GetComponent<MeshRenderer>();
+                mymesh.enabled = true;
+            }
+        }
         lives = 3;
     }
 
     // Update is called once per frame
     void Update()
     {
-        target = vector_difference(new Vector3(this.transform.position.x, 0, this.transform.position.z), new Vector3(211.1f, 0, 150f));
-        targetDistance = distance_calculator(this.transform.position, new Vector3(211.1f, 0, 150f));
-        if (lives == 0) {
-            foreach (Transform childTransform in this.transform)
-            {
-                MeshRenderer mymesh = childTransform.GetComponent<MeshRenderer>();
-                mymesh.enabled = false;
-            }
+        directionDistance = distance_calculator(this.transform.position, target);
+        direction = vector_difference(new Vector3(this.transform.position.x, 0, this.transform.position.z), target);
+        if (lives <= 0) {
+            Destroy(this.gameObject);
         }
     }
     IEnumerator move()
     {
-        while (targetDistance != 5f) {       
-            rb.AddForce(target * 2f);
+        while (true) {    
+            Debug.Log(directionDistance);   
+            rb.AddForce(direction * 18f);
+            if (target == new Vector3(211.8262f, 0f, 161.6237f) && directionDistance <= 20f) {   
+                rb.AddForce(direction * -10 * 25f);
+                target = enemy.transform.position;
+            }
             yield return new WaitForSeconds(0.5f);
         }
             // myball.AddForce(new Vector3(enemyTR.transform.position.x - transform.position.x, enemyTR.transform.position.y - transform.position.y, enemyTR.transform.position.z - transform.position.z));
@@ -46,6 +55,6 @@ public class AIMovement : MonoBehaviour
     }
     float distance_calculator(Vector3 subtractor, Vector3 subtractee) {
         Vector3 distance = vector_difference(subtractor, subtractee);
-        return Mathf.Pow((Mathf.Pow(distance.x, 2) + Mathf.Pow(distance.y, 2) + Mathf.Pow(distance.z, 2)), 2);
+        return Mathf.Sqrt(Mathf.Pow(distance.x, 2) + Mathf.Pow(distance.y, 2) + Mathf.Pow(distance.z, 2));
     }
 }

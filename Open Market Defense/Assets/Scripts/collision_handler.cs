@@ -21,9 +21,8 @@ public class collision_handler : MonoBehaviour
     }
     void OnCollisionExit(Collision collision)
     {
-        Debug.Log(collision.gameObject.name);
-        if (collision.gameObject.name == "soldier" || (collision.gameObject.name == "Terrain_0_0_1a46ecbd-1a41-4efb-98ab-bc5547954b02" && distance_calculator(this.transform.position, cannon) > 10)) {
-            if (collision.gameObject.name == "soldier") {
+        if (collision.gameObject.name == "soldier(Clone)" || (collision.gameObject.name == "Terrain_0_0_1a46ecbd-1a41-4efb-98ab-bc5547954b02" && distance_calculator(this.transform.position, cannon) > 10)) {
+            if (collision.gameObject.name == "soldier(Clone)") {
                 AIMovement script = collision.gameObject.GetComponent<AIMovement>();
                 script.take_damage();
             }
