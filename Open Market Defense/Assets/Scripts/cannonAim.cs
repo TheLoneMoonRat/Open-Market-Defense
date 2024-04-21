@@ -5,6 +5,7 @@ using UnityEngine;
 public class cannonAim : MonoBehaviour
 {
     public Transform enemyTR;
+    public float force;
     public GameObject cannonball;
     // Start is called before the first frame update
     void Start()
@@ -19,14 +20,17 @@ public class cannonAim : MonoBehaviour
     }
     IEnumerator fire()
     {
-        for (int i = 0; i < 5; i++) {        
+        for (int i = 0; i < 50; i++) {        
             GameObject myball = Instantiate(cannonball, this.transform.position, Quaternion.identity);
             MeshRenderer mymesh = myball.GetComponent<MeshRenderer>();
             Rigidbody myrigid = myball.GetComponent<Rigidbody>();
 
             mymesh.enabled = true;
-            myrigid.AddForce(vector_difference(this.transform.position, enemyTR.position) * 50f);
+            collision_handler script = myball.GetComponent<collision_handler>();
+            script.get_game_parent(this.transform.position);
+            myrigid.AddForce(vector_difference(this.transform.position, enemyTR.position) * force);
             
+
             yield return new WaitForSeconds(1f);
         }
             // myball.AddForce(new Vector3(enemyTR.transform.position.x - transform.position.x, enemyTR.transform.position.y - transform.position.y, enemyTR.transform.position.z - transform.position.z));
